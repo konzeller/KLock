@@ -1,0 +1,9 @@
+Atmega32U4 - ordered
+
+rtc - ordered
+
+LED strip WS2812B - ordered
+
+frame --> tbd
+
+cover --> tbd

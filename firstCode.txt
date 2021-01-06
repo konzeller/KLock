@@ -1,0 +1,108 @@
+void setup() {
+	IN_CONFIG = FALSE;
+	CHANGE_HOUR = FALSE;
+	CHANGE_MINUTE = FALSE;
+	
+	showStartupRoutine();
+	getDFCclock();
+}
+
+void loop(){
+	
+	checkButtons();
+	
+	getRTCTime();
+	setLEDTime();
+		
+}
+
+
+
+void getDFCclock(){
+	
+	loop{
+		readDFC();
+		toggleLED_FUNK();
+	}
+	if newTimeavailable{
+		setRTCTime(currentTime);
+	}
+	else{
+		setRTCTime(defaultTime);
+	}
+}
+
+
+void showStartupRoutine(){
+	// LED from getting coloured from northwest to southeast 
+}
+
+
+
+void checkButtons(){
+	getButton()
+	
+	// Check if Initialization button is clicked
+	if INIT_BTN{
+		// get current DFC clock
+		getDFCclock()
+	
+	// check if brighnessbutton is clicked
+	}else if BRIGHTNESS_BTN{
+		// increase brightness +1
+		setBrightness();
+	
+	// check if config button is clicked
+	}else if CONFIG_BTN{
+		// check if config button is clicked for first time
+		if (!IN_CONFIG && !CHANGE_HOUR && !CHANGE_MINUTE{
+			// go into config mode and "change hour" mode
+			IN_CONFIG = TRUE;
+			CHANGE_HOUR = TRUE;
+			setLEDColour(GREEN);
+		// check if config button is clicked for second time
+		}else if (IN_CONFIG && CHANGE_HOUR && !CHANGE_MINUTE){
+			// go out of "change hour" mode and go into "change minute" mode
+			CHANGE_HOUR = FALSE;
+			CHANGE_MINUTE = TRUE;
+			setLEDColour(BLUE);
+		// check if config button is clicked for third time
+		}else if (IN_CONFIG && !CHANGE_HOUR && CHANGE_MINUTE){
+			// go out of "change minute" mode and go out of config
+			CHANGE_MINUTE = FALSE;
+			IN_CONFIG = FALSE;
+			setLEDColour(WHITE);
+		}
+	// check if set clock button is clicked
+	}else if SETCLOCK_BTN{
+		// check if programm is in config mode
+		if IN_CONFIG{
+			// check if we are in "change hour" mode
+			if CHANGE_HOUR{
+				increaseHour();
+			// check if we are in "change  minute" mode
+			}else if CHANGE_MINUTE{
+				increaseMinute()
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
