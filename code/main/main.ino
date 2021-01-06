@@ -1,10 +1,12 @@
-#include <Wire.h>
+
 
 //#include "DCF77.h" //Alle DCF77 Funktionen laufen ueber diese Bibliothek.
 //#include "TimeLib.h"
 
 //#define DCF77PIN 9
 
+enum contrStatus {RUNNING, CLOCK_ADAPT, BRIGHTNESS};
+enum contrStatus C_STATUS;
 
 int NOW_HOUR;
 int NOW_MIN;
@@ -14,6 +16,7 @@ int NEW_MIN;
 int NEW_SEC;
 int LAST_HOUR =- 1;
 int LAST_MIN = -1;
+
 
 //DCF77 DCF = DCF77(DCF77PIN,0);
 
@@ -25,6 +28,7 @@ void setup () {
  
   Serial.begin(9600);
 //
+  CS_init();
   RTC_init();
   LED_init();
 
@@ -36,6 +40,8 @@ void loop () {
   
   RTC_updateDateTime();
   LED_showCurrentTime();
-  delay(1000);
+  CS_checkButtons();
+  delay(50);
+  Serial.println(C_STATUS);
 
 }
