@@ -29,7 +29,7 @@ void LED_showHour(){
 void LED_init () {
   FastLED.addLeds<WS2811, LED_PIN, GRB>(LEDs, NUM_LEDS).setCorrection( TypicalLEDStrip );
   FastLED.setBrightness(LED_BRIGHTNESS);
-//  LED_initRoutine();
+  LED_initRoutine();
   LED_Blackout();
 }
 

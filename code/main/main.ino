@@ -11,9 +11,6 @@ enum contrStatus C_STATUS;
 int NOW_HOUR;
 int NOW_MIN;
 int NOW_SEC;
-int NEW_HOUR;
-int NEW_MIN;
-int NEW_SEC;
 int LAST_HOUR =- 1;
 int LAST_MIN = -1;
 

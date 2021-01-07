@@ -49,18 +49,18 @@ void LED_setBrightness(){
 // init routine
 void LED_initRoutine(){
   
-  for(uint16_t i=0; i<NUM_LEDS; i++){
-    LED_setPixel(i, random(0x40,0xff),random(0x40,0xff), random(0x40,0xff));
-    LED_showStrip();
-    delay(50);
-  }
-  delay(1500);
-  for(int i=0; i<NUM_LEDS*2; i++){
-    fadeToBlackBy(LEDs, NUM_LEDS, 10);
-    delay(10);
-    LED_showStrip();
-  }
-  meteorRain(0xff,0xff,0xff,10, 64, true, 30);
+//  for(uint16_t i=0; i<NUM_LEDS; i++){
+//    LED_setPixel(i, random(0x40,0xff),random(0x40,0xff), random(0x40,0xff));
+//    LED_showStrip();
+//    delay(50);
+//  }
+//  delay(1500);
+//  for(int i=0; i<NUM_LEDS*2; i++){
+//    fadeToBlackBy(LEDs, NUM_LEDS, 10);
+//    delay(10);
+//    LED_showStrip();
+//  }
+  meteorRain(0xff,0xff,0x00,15, 64, true, 55);
 }
 
 // show the strip
