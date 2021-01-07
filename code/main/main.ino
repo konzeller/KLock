@@ -5,7 +5,7 @@
 
 //#define DCF77PIN 9
 
-enum contrStatus {RUNNING, CLOCK_ADAPT, BRIGHTNESS};
+enum contrStatus {RUNNING, CLOCK_ADAPT_HOUR, CLOCK_ADAPT_MIN};
 enum contrStatus C_STATUS;
 
 int NOW_HOUR;
@@ -17,15 +17,13 @@ int NEW_SEC;
 int LAST_HOUR =- 1;
 int LAST_MIN = -1;
 
+int LED_BRIGHTNESS = 255;  // brigness of clock --> 0-255
+
 
 //DCF77 DCF = DCF77(DCF77PIN,0);
 
 void setup () {
-  
-//#ifndef ESP8266
-//  while (!Serial); // for Leonardo/Micro/Zero
-//#endif
- 
+
   Serial.begin(9600);
 //
   CS_init();
@@ -38,10 +36,15 @@ void setup () {
  
 void loop () {
   
-  RTC_updateDateTime();
-  LED_showCurrentTime();
   CS_checkButtons();
+  
+  // update only when in Running mode
+  if(C_STATUS == RUNNING){
+    RTC_updateDateTime();
+    LED_showCurrentTime();
+  }
+  
   delay(50);
-  Serial.println(C_STATUS);
+//  Serial.println(C_STATUS);
 
 }
