@@ -45,5 +45,5 @@ void RTC_setNewTime(int new_hour, int new_minute){
   Serial.print(new_hour,DEC);
   Serial.print(new_minute,DEC);
   
-  RTC.adjust(DateTime(DEFAULT_YEAR,DEFAULT_MONTH,DEFAULT_DAY,new_hour,new_minute,NOW_SEC));
+  RTC.adjust(DateTime(DEFAULT_YEAR,DEFAULT_MONTH,DEFAULT_DAY,new_hour,new_minute,(int)second()));
 }

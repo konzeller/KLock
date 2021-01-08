@@ -7,7 +7,7 @@
 CRGB LEDs[NUM_LEDS];
 bool ESIST_OFF = true;
 
-#define FUNK[4] {35, 48, 55, 68}; // FUNK
+int FUNK[4] {35, 48, 55, 68}; // FUNK
 int UHR[3] = {82, 101, 103};
 int AM[2] = {57, 66};
 int PM[2] = {45, 58};
@@ -198,6 +198,10 @@ void meteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTra
   }
 }
 
-//void fadeToBlack(int ledNo, byte fadeValue) {
-//   leds[ledNo].fadeToBlackBy( fadeValue );
-//}
+void LED_blinkFUNK(int cycletime){
+  LED_setText(FUNK, sizeof(FUNK)/sizeof(int));
+  LED_showStrip();
+  delay(cycletime);
+  LED_Blackout();
+  LED_showStrip();
+}
