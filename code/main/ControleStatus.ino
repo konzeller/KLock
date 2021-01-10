@@ -51,7 +51,7 @@ void CS_changeBrightness(){
   if(LED_BRIGHTNESS <= 255){
     LED_setBrightness();
   }else{
-    LED_blinkALL(4);
+    LED_blinkALL(2);
     LED_BRIGHTNESS = 0;
     LED_showCurrentTime();
   }
@@ -80,6 +80,7 @@ void CS_checkCLOCKADAPT_BTN(){
         case CLOCK_ADAPT_MIN:
             RTC_setNewTime(NOW_HOUR, NOW_MIN);
             C_STATUS = RUNNING;
+            LED_blinkALL(1);
             break;
   }
     }

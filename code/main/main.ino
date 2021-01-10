@@ -7,17 +7,20 @@ int NOW_SEC;
 int LAST_HOUR =- 1;
 int LAST_MIN = -1;
 
+bool AM_PM_ON = false;
+
 int LED_BRIGHTNESS = 255;  // brigness of clock --> 0-255
 
 void setup () {
 
   Serial.begin(9600);
   // while(!Serial);
-  DCF_init();
+//  DCF_init();
+  LED_init();
   CS_init();
   RTC_init();
-  LED_init();
-  DCF_searchInitTime();
+  
+//  DCF_searchInitTime();
 }
 
 void loop () {
