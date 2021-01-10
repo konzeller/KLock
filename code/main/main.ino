@@ -12,7 +12,7 @@ int LED_BRIGHTNESS = 255;  // brigness of clock --> 0-255
 void setup () {
 
   Serial.begin(9600);
-  while(!Serial);
+  // while(!Serial);
   DCF_init();
   CS_init();
   RTC_init();

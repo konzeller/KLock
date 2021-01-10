@@ -1,7 +1,6 @@
 #include <Wire.h>
 
 #define BTN_PIN_CLOCKADAPT 6
-//#define BTN_PIN_HOUR 7
 #define BTN_PIN_SET 8
 
 

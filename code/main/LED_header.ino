@@ -4,8 +4,16 @@
 #define LED_PIN 10
 #define NUM_LEDS 114
 
+long LED_REG_COL = 0xffffff;
+struct rgbcolour{byte red;byte green;byte blue;};
+struct rgbcolour LED_REG_COL_RGB;
+struct rgbcolour LED_CONFIG_COL_RGB = {.red = 0xff, .green = 0x00, .blue=0x00};
+struct rgbcolour LED_BLACK_COL_RGB = {.red = 0x00, .green = 0x00, .blue=0x00};
+struct rgbcolour LED_CURRENT_COL;
+
 CRGB LEDs[NUM_LEDS];
 bool ESIST_OFF = true;
+
 
 int FUNK[4] {35, 48, 55, 68}; // FUNK
 int UHR[3] = {82, 101, 103};
@@ -42,6 +50,15 @@ int SIZEOF_WORDS_HOUR[12] = {5,4,4,4,4,4,5,6,4,4,4,3};
 
 int PLUS_MIN[4] = {11, 113, 102, 0};
 
+void LED_calcColour(){
+  LED_REG_COL_RGB.red = (byte)(LED_REG_COL >> 16);
+  LED_REG_COL_RGB.green = (byte)((LED_REG_COL >> 8) & 0x00ff);
+  LED_REG_COL_RGB.blue = (byte)(LED_REG_COL & 0x0000ff);
+  Serial.println("COLOURS");
+  Serial.println(LED_REG_COL_RGB.red);
+  Serial.println(LED_REG_COL_RGB.green);
+  Serial.println(LED_REG_COL_RGB.blue);
+}
 
 void LED_setBrightness(){
   FastLED.setBrightness(LED_BRIGHTNESS);
@@ -61,6 +78,7 @@ void LED_initRoutine(){
 //    LED_showStrip();
 //  }
   meteorRain(0xff,0xff,0x00,15, 64, true, 55);
+  LED_calcColour();
 }
 
 // show the strip
@@ -69,30 +87,33 @@ void LED_showStrip() {
 }
 
 // set the the single pixel
-void LED_setPixel(int Pixel, byte red, byte green, byte blue) {
+void LED_setPixel(int Pixel) {
    // FastLED
-   LEDs[Pixel].r = red;
-   LEDs[Pixel].g = green;
-   LEDs[Pixel].b = blue;
+   LEDs[Pixel].r = LED_CURRENT_COL.red;
+   LEDs[Pixel].g = LED_CURRENT_COL.green;
+   LEDs[Pixel].b = LED_CURRENT_COL.blue;
 }
 
 void LED_blinkALL(size_t blinktime){
+  LED_CURRENT_COL = LED_CONFIG_COL_RGB;
   for(size_t i=0; i<blinktime; i++){
     for(size_t j=0; j<NUM_LEDS; j++){
-      LED_setPixel(j,0xff,0xff,0xff);
+      LED_setPixel(j);
     }
     LED_showStrip();
     delay(500);
     LED_Blackout();
     delay(500);
-  } 
+  }
 }
 // all leds blackout
 void LED_Blackout(){
+  LED_CURRENT_COL = LED_BLACK_COL_RGB;
   for(uint16_t i = 0; i < NUM_LEDS; i++ ) {
-    LED_setPixel(i, 0x00, 0x00, 0x00); 
+    LED_setPixel(i); 
   }
   LED_showStrip();
+  LED_CURRENT_COL = LED_REG_COL_RGB;
   ESIST_OFF = true;
   LAST_HOUR = -1;
   LAST_MIN = -1; 
@@ -100,22 +121,26 @@ void LED_Blackout(){
 
 // defined word blackout
 void LED_Blackout(int text[], int size_of){
+  LED_CURRENT_COL = LED_BLACK_COL_RGB;
   for(uint16_t i = 0; i < size_of; i++ ) {
-    LED_setPixel(text[i], 0x00, 0x00, 0x00); 
+    LED_setPixel(text[i]); 
   }
   LED_showStrip();
+  LED_CURRENT_COL = LED_REG_COL_RGB;
 }
 
 // defined word set
 void LED_setText(int text[], int size_of) {
   for(uint16_t i = 0; i<size_of; i++){
-     LED_setPixel(text[i], 0x00, 0xff, 0xff);
+     LED_setPixel(text[i]);
   }
+  LED_CURRENT_COL = LED_REG_COL_RGB;
 }
 
 // defined pixel on
 void LED_setText(int text) {
-  LED_setPixel(text, 0x00, 0xff, 0xff);
+  LED_setPixel(text);
+  LED_CURRENT_COL = LED_REG_COL_RGB;
 }
 
 void LED_setAM_PM(){
@@ -128,8 +153,6 @@ void LED_setAM_PM(){
   }
 }
 void LED_setHour(int setHour = LAST_HOUR){
-  Serial.println("setHOUR: ");
-  Serial.print(setHour);
   LED_setAM_PM();
   LED_Blackout(LED_HOURS, sizeof(LED_HOURS)/sizeof(int));
   LED_setText(WORDS_HOUR[setHour],SIZEOF_WORDS_HOUR[setHour]);
@@ -172,9 +195,10 @@ void LED_showESIST(){
 //  meteorRain(0xff,0xff,0xff,10, 64, true, 30);
 //}
 
-void meteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDecay, int SpeedDelay) {  
+void meteorRain(byte r, byte g, byte b, byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDecay, int SpeedDelay) {  
   LED_Blackout();
- 
+  struct rgbcolour meteorColour = {.red =r, .green = g, .blue=b};
+  LED_CURRENT_COL = meteorColour;
   for(int i = 0; i < NUM_LEDS+NUM_LEDS; i++) {
    
    
@@ -189,16 +213,18 @@ void meteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTra
     // draw meteor
     for(int j = 0; j < meteorSize; j++) {
       if( ( i-j <NUM_LEDS) && (i-j>=0) ) {
-        LED_setPixel(i-j, red, green, blue);
+        LED_setPixel(i-j);
       }
     }
    
     LED_showStrip();
     delay(SpeedDelay);
   }
+  LED_CURRENT_COL = LED_REG_COL_RGB;
 }
 
 void LED_blinkFUNK(int cycletime){
+  LED_CURRENT_COL = LED_CONFIG_COL_RGB;
   LED_setText(FUNK, sizeof(FUNK)/sizeof(int));
   LED_showStrip();
   delay(cycletime);
