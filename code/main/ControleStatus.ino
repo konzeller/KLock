@@ -78,7 +78,7 @@ void CS_checkCLOCKADAPT_BTN() {
           //            LED_showStrip();
           break;
         case CLOCK_ADAPT_MIN:
-          RTC_setNewTime(NOW_HOUR, NOW_MIN);
+          RTC_setNewTime();//NOW_HOUR, NOW_MIN);
           C_STATUS = RUNNING;
           LED_blinkALL(1);
           break;

@@ -202,6 +202,7 @@ void LED_setMinute(int mod_minute) {
     }
   } else {
     LED_fadeOut(PLUS_MIN, sizeof(PLUS_MIN) / sizeof(int));
+    LED_fadeOut(PLUS_MIN, sizeof(PLUS_MIN) / sizeof(int));
   }
 
   if (ALL_OUT || (mod_minute == 0)) {
@@ -314,7 +315,7 @@ void matrixScreen(int eyeSize) {
 }
 
 void LED_blinkFUNK(int cycletime) {
-  Serial.println("Show Funk Blink");
+//  Serial.println("Show Funk Blink");
   LED_CURRENT_COL.setColorCode(LED_COL_CONFIG);
   LED_fadeIn(FUNK, sizeof(FUNK) / sizeof(int));
   delay(cycletime);

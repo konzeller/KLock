@@ -41,7 +41,20 @@ void DCF_searchInitTime() {
 
 }
 
+void DCF_getTime() {
+  DCFtime = DCF.getTime();
+  if (DCFtime != 0) {
+    Serial.println("NEW DCF Time available");
+    DCF_setTime();
+  }
+}
+
 void DCF_setTime() {
-  setTime(DCFtime);
-  RTC_setNewTime((int)hour(), (int)minute());
+  NOW_YEAR = year(DCFtime);
+  NOW_MONTH = month(DCFtime);
+  NOW_DAY = day(DCFtime);
+  NOW_HOUR = hour(DCFtime);
+  NOW_MIN = minute(DCFtime);
+  NOW_SEC = second(DCFtime);
+  RTC_setNewTime();
 }

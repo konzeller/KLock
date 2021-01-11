@@ -1,6 +1,9 @@
 enum contrStatus {RUNNING, INIT_PHASE, CLOCK_ADAPT_HOUR, CLOCK_ADAPT_MIN};
 enum contrStatus C_STATUS;
 
+int NOW_YEAR;
+int NOW_MONTH;
+int NOW_DAY;
 int NOW_HOUR;
 int NOW_MIN;
 int NOW_SEC;
@@ -30,6 +33,7 @@ void loop () {
 
   // update only when in Running mode
   if (C_STATUS == RUNNING) {
+    DCF_getTime();
     RTC_updateDateTime();
     LED_showCurrentTime();
   }

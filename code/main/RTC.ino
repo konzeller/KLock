@@ -1,4 +1,6 @@
 #include "RTClib.h"
+#include "TimeLib.h"
+
 
 /* Define default Time values */
 int DEFAULT_YEAR = 2021;
@@ -38,12 +40,16 @@ void RTC_updateDateTime(){
   NOW_SEC = RTC_NOW.second();
   }
 
+void RTC_setNewTime(){
 
-void RTC_setNewTime(int new_hour, int new_minute){
-  Serial.println("");
-  Serial.print("NEW TIME saved: ");
-  Serial.print(new_hour,DEC);
-  Serial.print(new_minute,DEC);
-  
-  RTC.adjust(DateTime(DEFAULT_YEAR,DEFAULT_MONTH,DEFAULT_DAY,new_hour,new_minute,(int)second()));
+  RTC.adjust(DateTime(NOW_YEAR,NOW_MONTH,NOW_DAY,NOW_HOUR,NOW_MIN,NOW_SEC));
 }
+//void RTC_setNewTime(int new_hour, int new_minute){
+//  Serial.println("");
+//  Serial.print("NEW TIME saved: ");
+//  Serial.print(new_hour,DEC);
+//  Serial.print(":");
+//  Serial.print(new_minute,DEC);
+//  
+//  RTC.adjust(DateTime(DEFAULT_YEAR,DEFAULT_MONTH,DEFAULT_DAY,new_hour,new_minute,(int)second()));
+//}
