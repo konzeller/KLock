@@ -1,29 +1,37 @@
-void LED_showMinute(){
-  if(NOW_MIN != LAST_MIN){
+void LED_showMinute() {
+  if (NOW_MIN != LAST_MIN) {
     LAST_MIN = NOW_MIN;
     int mod_minute = NOW_MIN % 5;
     LED_setMinute(mod_minute);
   }
 }
 
-void LED_showHour(){
+void LED_showHour() {
 
-      int tempHour = NOW_HOUR;
-      // adjust the minutes only in RUNNING mode
-      if(C_STATUS == RUNNING){if(NOW_MIN >= 25){tempHour +=1;}}
-      if(tempHour > 12){tempHour = tempHour - 12;}
-      else if(tempHour == 12){tempHour = 0;}
-
-// function call of setting the LEDS for the hours
-      if(C_STATUS != RUNNING){
-        LED_setHour(tempHour);
-      }
-      else{
-        if(tempHour != LAST_HOUR){
-         LAST_HOUR = tempHour;
-          LED_setHour();
-        }
+  int tempHour = NOW_HOUR;
+  // adjust the minutes only in RUNNING mode
+  if (C_STATUS == RUNNING) {
+    if (NOW_MIN >= 25) {
+      tempHour += 1;
     }
+  }
+  if (tempHour > 12) {
+    tempHour = tempHour - 12;
+  }
+  else if (tempHour == 12) {
+    tempHour = 0;
+  }
+
+  // function call of setting the LEDS for the hours
+  if (C_STATUS != RUNNING) {
+    LED_setHour(tempHour);
+  }
+  else {
+    if (tempHour != LAST_HOUR) {
+      LAST_HOUR = tempHour;
+      LED_setHour();
+    }
+  }
 }
 
 void LED_init () {
@@ -31,14 +39,17 @@ void LED_init () {
   FastLED.setBrightness(LED_BRIGHTNESS);
   LED_initRoutine();
   LED_Blackout();
+  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
 }
 
 // check current time and set the LEDs
-void LED_showCurrentTime(){
-  LED_CURRENT_COL = LED_REG_COL_RGB;
+void LED_showCurrentTime() {
+  //  LED_CURRENT_COL = LED_REG_COL_RGB;
+//  Serial.println("Show Current Time");
   LED_showESIST();
   LED_showMinute();
   LED_showHour();
-  LED_showStrip();
-    
+
+  //  LED_showStrip();
+
 }

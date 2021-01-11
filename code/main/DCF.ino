@@ -26,21 +26,22 @@ void DCF_searchInitTime() {
     delay(FUNKCYCLE);
     DCFtime = DCF.getTime();
     LED_blinkFUNK(FUNKCYCLE);
-    if(DCFtime!=0){
+    if (DCFtime != 0) {
       DCF_setTime();
       Serial.println("NEW DCF Time available");
-//      RTC_setNewTime(hour(), minute());
+      //      RTC_setNewTime(hour(), minute());
       goOn = false;
-      }
+    }
     if (counter > 240) {
       goOn = false;
       Serial.println("ERROR - NO DCF UPDATE available");
     }
     counter++;
   }
+
 }
 
-void DCF_setTime(){
+void DCF_setTime() {
   setTime(DCFtime);
   RTC_setNewTime((int)hour(), (int)minute());
 }
