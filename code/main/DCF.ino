@@ -31,9 +31,9 @@ void DCF_searchInitTime() {
     if (DCFtime != 0) {
       DCF_setTime();
       Serial.println("NEW DCF Time available");
-//      goOn = false;
+      goOn = false;
     }
-    if (counter > 240)/*waiting for ~4 Minutes before time update cancled*/ {
+    if (counter > 240) /*waiting for ~4 Minutes before time update cancled*/ {
       goOn = false;
       Serial.println("ERROR - NO DCF UPDATE available");
     }
@@ -42,15 +42,13 @@ void DCF_searchInitTime() {
 
 }
 
-void DCF_getTime() {
-  if(DCF_stopped){Serial.println("START DCF");DCF.initialize();DCF_stopped = false;}
-  DCFtime = DCF.getTime();
-  if (DCFtime != 0) {
-    Serial.println("NEW DCF Time available");
-    DCF_setTime();
-    DCF_stopped = true;
-  }
-}
+//void DCF_getTime() {
+//  DCFtime = DCF.getTime();
+//  if (DCFtime != 0) {
+//    Serial.println("NEW DCF Time available");
+//    DCF_setTime();
+//  }
+//}
 
 void DCF_setTime() {
   NOW_YEAR = year(DCFtime);

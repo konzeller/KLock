@@ -1,3 +1,6 @@
+#define UPDATE_DCF_AT_HOUR 20  // update daily at 3:30 AM
+#define UPDATE_DCF_AT_MIN 0 // update daily at 3:30 AM
+
 enum contrStatus {RUNNING, INIT_PHASE, CLOCK_ADAPT_HOUR, CLOCK_ADAPT_MIN};
 enum contrStatus C_STATUS;
 
@@ -33,7 +36,9 @@ void loop () {
 
   // update only when in Running mode
   if (C_STATUS == RUNNING) {
-    DCF_getTime();
+    if((NOW_HOUR == UPDATE_DCF_AT_HOUR) & (NOW_MIN == UPDATE_DCF_AT_MIN)){
+       DCF_searchInitTime();
+    }
     RTC_updateDateTime();
     LED_showCurrentTime();
   }
