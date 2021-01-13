@@ -17,6 +17,7 @@ DateTime RTC_NOW;
 
 
 void RTC_init(){
+  
   if (! RTC.begin()) {
     Serial.println("Couldn't find RTC");
     while (1);

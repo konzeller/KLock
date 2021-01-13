@@ -74,16 +74,14 @@ int PLUS_MIN[4] = {11, 113, 102, 0};
 
 void LED_setBrightness() {
   FastLED.setBrightness(LED_BRIGHTNESS);
-  LED_showStrip();
+  FastLED.show();
 }
 
 // init routine
 void LED_initRoutine() {
   LED_Blackout();
-  
   LED_CURRENT_COL.setColorCode(LED_COL_METEOR);
-  meteorRain(15, 64, true, 55);
-  //matrixScreen(1);
+  LED_meteorRain(15, 64, true, 55);
 }
 
 // show the strip
@@ -101,11 +99,11 @@ void LED_setPixel(int Pixel) {
   LEDs[Pixel].b = LED_CURRENT_COL.b;
 }
 
-void LED_setPixelBlack(int Pixel) {
+void LED_setPixelColor(int Pixel, byte r, byte g, byte b) {
   // FastLED
-  LEDs[Pixel].r = 0x00;
-  LEDs[Pixel].g = 0x00;
-  LEDs[Pixel].b = 0x00;
+  LEDs[Pixel].r = r;
+  LEDs[Pixel].g = g;
+  LEDs[Pixel].b = b;
 }
 
 void LED_blinkALL(size_t blinktime) {
@@ -144,7 +142,7 @@ void LED_Blackout() {
 
 void LED_fadeIn(int text[], int size_of) {
   //  Serial.println("LED fade in start");
-//  uint8_t fade = 100;
+  //  uint8_t fade = 100;
   for (size_t j = 0; j < FADE_VAL; j++) {
     for (uint16_t i = 0; i < size_of; i++ ) {
       LEDs[text[i]].fadeIn(LED_CURRENT_COL, FADE_VAL);
@@ -156,7 +154,7 @@ void LED_fadeIn(int text[], int size_of) {
 
 void LED_fadeOut(int text[], int size_of) {
   //  Serial.println("LED fade out start");
-//  uint8_t fade = 100;
+  //  uint8_t fade = 100;
   //  Serial.println(LEDs[text[1]].r);
   for (size_t j = 0; j < FADE_VAL; j++) {
 
@@ -172,7 +170,7 @@ void LED_fadeOut(int text[], int size_of) {
 
 void LED_setAM_PM() {
   if (AM_PM_ON || ( C_STATUS != RUNNING)) {
-    //    Serial.println("Show AM or PM");
+        Serial.println("Show AM or PM");
     if (NOW_HOUR >= 12) {
       if (PM_OFF) {
         LED_fadeOut(AM, sizeof(AM) / sizeof(int));
@@ -190,33 +188,35 @@ void LED_setAM_PM() {
   }
 }
 void LED_setHour(int setHour = LAST_HOUR) {
-  //  Serial.println("LED Set Hour");
+  
   LED_setAM_PM();
   int lHour = setHour - 1;
   if (lHour == -1) {
     lHour = 11;
   }
+//  Serial.println("LED Set Hour");
+//  Serial.println(setHour);
   LED_fadeOut(WORDS_HOUR[lHour], SIZEOF_WORDS_HOUR[lHour]);
   LED_fadeIn(WORDS_HOUR[setHour], SIZEOF_WORDS_HOUR[setHour]);
 }
 
 void LED_setMinute(int mod_minute) {
 
-  Serial.println("LED Time: ");
-  Serial.print(NOW_HOUR);
-  Serial.print(":");
- Serial.print(":");
-  Serial.print(NOW_MIN);
-  Serial.print(":");
-  Serial.println(NOW_SEC);
+//  Serial.println("LED Time: ");
+//  Serial.print(NOW_HOUR);
+//  Serial.print(":");
+//  Serial.print(":");
+//  Serial.print(NOW_MIN);
+//  Serial.print(":");
+//  Serial.println(NOW_SEC);
   if (mod_minute != 0) {
     for (uint8_t i = 0; i < mod_minute; i++) {
       LED_setPixel(PLUS_MIN[i]);
       LED_showStrip();
     }
   } else {
-    for(size_t i=0;i<sizeof(PLUS_MIN)/sizeof(int);i++){
-      LED_setPixelBlack(PLUS_MIN[i]);
+    for (size_t i = 0; i < sizeof(PLUS_MIN) / sizeof(int); i++) {
+      LED_setPixelColor(PLUS_MIN[i], 0x00, 0x00, 0x00);
     }
     LED_showStrip();
   }
@@ -290,7 +290,7 @@ void LED_showESIST() {
 /// --------------------------------------------------------------------------------------------------------------------------------------
 
 
-void meteorRain(byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDecay, int SpeedDelay) {
+void LED_meteorRain(byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDecay, int SpeedDelay) {
 
   for (int i = 0; i < NUM_LEDS + NUM_LEDS; i++) {
     // fade brightness all LEDs one step
@@ -312,45 +312,81 @@ void meteorRain(byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDeca
 
 }
 
-void matrixScreen(int eyeSize) {
-  for (size_t cyc = 0; cyc < 10; cyc++) {
-    for (size_t i = 0; i < 10; i++) {
-      LED_Blackout();
-      for (int col = 0; col < 11; col++) {
-        LED_setPixel(COLUMN[col][i]);
-        for (int j = 1; j <= eyeSize; j++) {
-          LED_setPixel(COLUMN[col][j + i]);
-        }
+void LED_matrixScreen() {
+  int8_t High_rows = 10;
+  int8_t Width_col = 11;
+  int SpeedDelay = 160;
+  int Pixel = 0xAFFFAF;
+  int TrailDelay = 160;
 
-        LED_setPixel(COLUMN[col][i + eyeSize + 1]);
+  for (int8_t times = 0; times < 60; times++) {
+
+    for (int8_t row = High_rows - 1; row >= 0; row--)
+    {
+      for (int8_t col = 0; col < Width_col; col++)
+      {
+        if (LEDs[COLUMN[col][row]] == CRGB(Pixel))
+        {
+          LEDs[COLUMN[col][row]] = CRGB(0x006400);//(0, 130, 0); // create trail
+          if (row < High_rows - 1) LEDs[COLUMN[col][row + 1]] = CRGB(Pixel);
+        }
       }
-      LED_showStrip();
-      delay(100);
     }
+
+    // fade all leds
+    for (int i = 0; i < NUM_LEDS; i++) {
+      if (LEDs[i].g != 255) LEDs[i].nscale8(TrailDelay); // only fade trail
+    }
+
+    // check for empty screen to ensure code spawn
+    bool emptyScreen = true;
+    for (int i = 0; i < NUM_LEDS; i++) {
+      if (LEDs[i])
+      {
+        emptyScreen = false;
+        break;
+      }
+    }
+    if (random8(2) == 0 || emptyScreen) // lower number == more frequent spawns
+    {
+      int8_t spawnX = random8(Width_col);
+      LEDs[COLUMN[spawnX][0]] = CRGB(Pixel);
+    }
+
+    FastLED.show();
+    delay(SpeedDelay);
   }
+
+  for (size_t j = 0; j < NUM_LEDS*2; j++) {
+    for (uint16_t i = 0; i < NUM_LEDS; i++ ) {
+      LEDs[i].fadeToBlackBy(10);
+    }
+    FastLED.show();
+  }
+  LED_Blackout();
 }
 
 void LED_blinkFUNK(int cycletime) {
-//  Serial.println("Show Funk Blink");
+  //  Serial.println("Show Funk Blink");
   LED_CURRENT_COL.setColorCode(LED_COL_CONFIG);
   LED_fadeIn(FUNK, sizeof(FUNK) / sizeof(int));
   delay(cycletime);
   LED_fadeOut(FUNK, sizeof(FUNK) / sizeof(int));
-  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR); 
+  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
 }
 
 // TBD -- connection to Button
-void LED_changeREG_COL(){
-  
+void LED_changeREG_COL() {
+
   Serial.println("Change Color");
   Serial.println("--");
-  if(LED_COL_REGULAR <= 0xFFFFFF){
-    LED_COL_REGULAR =LED_COL_REGULAR+COL_FADE;
+  if (LED_COL_REGULAR <= 0xFFFFFF) {
+    LED_COL_REGULAR = LED_COL_REGULAR + COL_FADE;
     LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
-    }else{
-      LED_COL_REGULAR=0;
-      }
-  Serial.println((LED_COL_REGULAR),HEX);
-  Serial.println("--");
-  
+  } else {
+    LED_COL_REGULAR = 0;
   }
+  Serial.println((LED_COL_REGULAR), HEX);
+  Serial.println("--");
+
+}

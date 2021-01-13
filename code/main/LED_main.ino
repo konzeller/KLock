@@ -7,7 +7,6 @@ void LED_showMinute() {
 }
 
 void LED_showHour() {
-
   int tempHour = NOW_HOUR;
   // adjust the minutes only in RUNNING mode
   if (C_STATUS == RUNNING) {
@@ -18,10 +17,9 @@ void LED_showHour() {
   if (tempHour > 12) {
     tempHour = tempHour - 12;
   }
-  else if (tempHour == 12) {
+  if (tempHour == 12) {
     tempHour = 0;
   }
-
   // function call of setting the LEDS for the hours
   if (C_STATUS != RUNNING) {
     LED_setHour(tempHour);
@@ -29,6 +27,7 @@ void LED_showHour() {
   else {
     if (tempHour != LAST_HOUR) {
       LAST_HOUR = tempHour;
+      if(C_STATUS == RUNNING){LED_matrixScreen();}
       LED_setHour();
     }
   }

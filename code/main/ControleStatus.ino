@@ -10,6 +10,7 @@ bool BTN_SET_LAST = true;
 void CS_init() {
   C_STATUS = RUNNING;
   pinMode(BTN_PIN_CLOCKADAPT, INPUT_PULLUP);
+  //  pinMode(BTN_PIN_HOUR, INPUT_PULLUP);
   pinMode(BTN_PIN_SET, INPUT_PULLUP);
 }
 
@@ -61,10 +62,10 @@ void CS_checkCLOCKADAPT_BTN() {
     if (btn_val != BTN_CLOCKADAPT_LAST) {
       switch (C_STATUS) {
         case RUNNING:
-          C_STATUS = CLOCK_ADAPT_HOUR;
           // here only the current hour should be shown in different colour
           LED_Blackout();
           LED_showHour();
+          C_STATUS = CLOCK_ADAPT_HOUR;
           LED_showStrip();
           break;
         case CLOCK_ADAPT_HOUR:
