@@ -44,8 +44,7 @@ void LED_init () {
 
 // check current time and set the LEDs
 void LED_showCurrentTime() {
-  //  LED_CURRENT_COL = LED_REG_COL_RGB;
-//  Serial.println("Show Current Time");
+  
   LED_showESIST();
   LED_showMinute();
   LED_showHour();

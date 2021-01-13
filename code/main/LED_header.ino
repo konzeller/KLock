@@ -4,11 +4,12 @@
 #define LED_PIN 10
 #define NUM_LEDS 114
 #define FADE_VAL 100
+#define COL_FADE 0x69
 
-uint32_t LED_COL_METEOR = 0xf8ff00;
-uint32_t LED_COL_REGULAR = 0xffffff;
-uint32_t LED_COL_CONFIG = 0xff0000;
-uint32_t LED_COL_BLACK = 0x000000;
+#define LED_COL_METEOR CRGB::OrangeRed
+#define LED_COL_CONFIG CRGB::Red
+
+int LED_COL_REGULAR = CRGB::White;
 CRGB LED_CURRENT_COL(LED_COL_REGULAR);
 
 CRGB LEDs[NUM_LEDS];
@@ -79,9 +80,10 @@ void LED_setBrightness() {
 // init routine
 void LED_initRoutine() {
   LED_Blackout();
+  
   LED_CURRENT_COL.setColorCode(LED_COL_METEOR);
-    meteorRain(15, 64, true, 55);
-  //  matrixScreen(1);
+  meteorRain(15, 64, true, 55);
+  //matrixScreen(1);
 }
 
 // show the strip
@@ -127,7 +129,7 @@ void LED_blinkALL(size_t blinktime) {
 
 // all leds blackout
 void LED_Blackout() {
-  LED_CURRENT_COL.setColorCode(LED_COL_BLACK);
+  LED_CURRENT_COL.setColorCode(CRGB::Black);
   for (uint16_t i = 0; i < NUM_LEDS; i++ ) {
     LED_setPixel(i);
   }
@@ -336,3 +338,19 @@ void LED_blinkFUNK(int cycletime) {
   LED_fadeOut(FUNK, sizeof(FUNK) / sizeof(int));
   LED_CURRENT_COL.setColorCode(LED_COL_REGULAR); 
 }
+
+// TBD -- connection to Button
+void LED_changeREG_COL(){
+  
+  Serial.println("Change Color");
+  Serial.println("--");
+  if(LED_COL_REGULAR <= 0xFFFFFF){
+    LED_COL_REGULAR =LED_COL_REGULAR+COL_FADE;
+    LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
+    }else{
+      LED_COL_REGULAR=0;
+      }
+  Serial.println((LED_COL_REGULAR),HEX);
+  Serial.println("--");
+  
+  }

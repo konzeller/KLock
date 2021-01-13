@@ -10,15 +10,12 @@ bool BTN_SET_LAST = true;
 void CS_init() {
   C_STATUS = RUNNING;
   pinMode(BTN_PIN_CLOCKADAPT, INPUT_PULLUP);
-  //  pinMode(BTN_PIN_HOUR, INPUT_PULLUP);
   pinMode(BTN_PIN_SET, INPUT_PULLUP);
 }
 
 
 // check if and which button is klicked
 void CS_checkButtons() {
-  //  int val = 0;
-  //  val = digitalRead(BTN_PIN_1);
   switch (C_STATUS) {
     case RUNNING:
       CS_checkBRIGHT_BTN();
