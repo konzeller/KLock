@@ -99,6 +99,13 @@ void LED_setPixel(int Pixel) {
   LEDs[Pixel].b = LED_CURRENT_COL.b;
 }
 
+void LED_setPixelBlack(int Pixel) {
+  // FastLED
+  LEDs[Pixel].r = 0x00;
+  LEDs[Pixel].g = 0x00;
+  LEDs[Pixel].b = 0x00;
+}
+
 void LED_blinkALL(size_t blinktime) {
 
   //  Serial.println("LED fade in ALL start");
@@ -167,7 +174,6 @@ void LED_setAM_PM() {
     if (NOW_HOUR >= 12) {
       if (PM_OFF) {
         LED_fadeOut(AM, sizeof(AM) / sizeof(int));
-        LED_fadeIn(PM, sizeof(PM) / sizeof(int));
         PM_OFF = false;
         AM_OFF = true;
       }
@@ -194,15 +200,23 @@ void LED_setHour(int setHour = LAST_HOUR) {
 
 void LED_setMinute(int mod_minute) {
 
-  //  Serial.println("LED Set minute");
+  Serial.println("LED Time: ");
+  Serial.print(NOW_HOUR);
+  Serial.print(":");
+ Serial.print(":");
+  Serial.print(NOW_MIN);
+  Serial.print(":");
+  Serial.println(NOW_SEC);
   if (mod_minute != 0) {
     for (uint8_t i = 0; i < mod_minute; i++) {
       LED_setPixel(PLUS_MIN[i]);
       LED_showStrip();
     }
   } else {
-    LED_fadeOut(PLUS_MIN, sizeof(PLUS_MIN) / sizeof(int));
-    LED_fadeOut(PLUS_MIN, sizeof(PLUS_MIN) / sizeof(int));
+    for(size_t i=0;i<sizeof(PLUS_MIN)/sizeof(int);i++){
+      LED_setPixelBlack(PLUS_MIN[i]);
+    }
+    LED_showStrip();
   }
 
   if (ALL_OUT || (mod_minute == 0)) {

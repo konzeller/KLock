@@ -7,12 +7,14 @@
 #define FUNKCYCLE 1000
 
 DCF77 DCF = DCF77(DCF77PIN, 0, true);
+bool DCF_stopped = true;
 unsigned char signal = 0;
 unsigned char buffer;
 time_t DCFtime;
 
 void DCF_init() {
   pinMode(DCF77PIN, INPUT);
+
   DCF.Start();
   Serial.println("Waiting for DCF77 time ... ");
   Serial.println("It will take at least 2 minutes before a first time update.");
@@ -29,10 +31,9 @@ void DCF_searchInitTime() {
     if (DCFtime != 0) {
       DCF_setTime();
       Serial.println("NEW DCF Time available");
-      //      RTC_setNewTime(hour(), minute());
-      goOn = false;
+//      goOn = false;
     }
-    if (counter > 240) {
+    if (counter > 240)/*waiting for ~4 Minutes before time update cancled*/ {
       goOn = false;
       Serial.println("ERROR - NO DCF UPDATE available");
     }
@@ -42,10 +43,12 @@ void DCF_searchInitTime() {
 }
 
 void DCF_getTime() {
+  if(DCF_stopped){Serial.println("START DCF");DCF.initialize();DCF_stopped = false;}
   DCFtime = DCF.getTime();
   if (DCFtime != 0) {
     Serial.println("NEW DCF Time available");
     DCF_setTime();
+    DCF_stopped = true;
   }
 }
 
