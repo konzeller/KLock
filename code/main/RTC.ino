@@ -4,11 +4,11 @@
 
 /* Define default Time values */
 int DEFAULT_YEAR = 2021;
-int DEFAULT_MONTH = 5;
-int DEFAULT_DAY = 14;
-int DEFAULT_HOUR = 20;
-int DEFAULT_MIN = 11;
-int DEFAULT_SEC = 0;
+uint8_t DEFAULT_MONTH = 5;
+uint8_t DEFAULT_DAY = 14;
+uint8_t DEFAULT_HOUR = 11;
+uint8_t DEFAULT_MIN = 50;
+uint8_t DEFAULT_SEC = 0;
 
 //char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
@@ -45,12 +45,3 @@ void RTC_setNewTime(){
 
   RTC.adjust(DateTime(NOW_YEAR,NOW_MONTH,NOW_DAY,NOW_HOUR,NOW_MIN,NOW_SEC));
 }
-//void RTC_setNewTime(int new_hour, int new_minute){
-//  Serial.println("");
-//  Serial.print("NEW TIME saved: ");
-//  Serial.print(new_hour,DEC);
-//  Serial.print(":");
-//  Serial.print(new_minute,DEC);
-//  
-//  RTC.adjust(DateTime(DEFAULT_YEAR,DEFAULT_MONTH,DEFAULT_DAY,new_hour,new_minute,(int)second()));
-//}

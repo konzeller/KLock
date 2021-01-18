@@ -1,7 +1,7 @@
 #include <Wire.h>
 
-#define BTN_PIN_CLOCKADAPT 6
-#define BTN_PIN_SET 8
+#define BTN_PIN_CLOCKADAPT 19
+#define BTN_PIN_SET 18
 
 
 bool BTN_CLOCKADAPT_LAST = true;
@@ -45,14 +45,16 @@ void CS_checkBRIGHT_BTN() {
 }
 
 void CS_changeBrightness() {
-  LED_BRIGHTNESS = LED_BRIGHTNESS + 5;
-  if (LED_BRIGHTNESS <= 255) {
+  LED_BRIGHTNESS = LED_BRIGHTNESS + 4;
+  Serial.println("BRIGHNESS");
+  Serial.println(LED_BRIGHTNESS);
+//  if (LED_BRIGHTNESS <= 255) {
     LED_setBrightness();
-  } else {
-    LED_blinkALL(2);
-    LED_BRIGHTNESS = 0;
-    LED_showCurrentTime();
-  }
+//  } else {
+//    LED_blinkALL(1);
+//    LED_BRIGHTNESS = 0;
+//    LED_showCurrentTime();
+//  }
 }
 
 // check in which running status the programm is
@@ -62,10 +64,11 @@ void CS_checkCLOCKADAPT_BTN() {
     if (btn_val != BTN_CLOCKADAPT_LAST) {
       switch (C_STATUS) {
         case RUNNING:
+          C_STATUS = CLOCK_ADAPT_HOUR;
           // here only the current hour should be shown in different colour
           LED_Blackout();
           LED_showHour();
-          C_STATUS = CLOCK_ADAPT_HOUR;
+          
           LED_showStrip();
           break;
         case CLOCK_ADAPT_HOUR:
@@ -76,9 +79,11 @@ void CS_checkCLOCKADAPT_BTN() {
           //            LED_showStrip();
           break;
         case CLOCK_ADAPT_MIN:
-          RTC_setNewTime();//NOW_HOUR, NOW_MIN);
           C_STATUS = RUNNING;
+          RTC_setNewTime();//NOW_HOUR, NOW_MIN);
           LED_blinkALL(1);
+//          LED_showCurrentTime();
+          
           break;
       }
     }
@@ -92,12 +97,12 @@ void CS_checkSET_TIME_BTN() {
     if (btn_val != BTN_SET_LAST) {
       switch (C_STATUS) {
         case CLOCK_ADAPT_HOUR:
-          Serial.println("HOUR PLUS ONE");
+//          Serial.println("HOUR PLUS ONE");
           CS_adaptHour();
           // here only the current minute should be shown in different colour
           break;
         case CLOCK_ADAPT_MIN:
-          Serial.println("MINUTE PLUS ONE");
+//          Serial.println("MINUTE PLUS ONE");
           CS_adaptMinute();
           break;
       }
@@ -108,7 +113,7 @@ void CS_checkSET_TIME_BTN() {
 
 // adapt the hours
 void CS_adaptHour() {
-  NOW_HOUR++;
+  ++NOW_HOUR;
   if (NOW_HOUR == 24) {
     NOW_HOUR = 0;
   }
@@ -118,7 +123,7 @@ void CS_adaptHour() {
 
 // adapt the minutes
 void CS_adaptMinute() {
-  NOW_MIN++;
+  ++NOW_MIN;
   if (NOW_MIN == 60) {
     NOW_MIN = 0;
   }

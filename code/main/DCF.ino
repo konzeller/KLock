@@ -25,19 +25,18 @@ void DCF_searchInitTime() {
   bool goOn = true;
   while (goOn)
   {
-    delay(FUNKCYCLE);
     DCFtime = DCF.getTime();
     LED_blinkFUNK(FUNKCYCLE);
     if (DCFtime != 0) {
       DCF_setTime();
-      Serial.println("NEW DCF Time available");
+//      Serial.println("NEW DCF Time available");
       goOn = false;
     }
-    if (counter > 240) /*waiting for ~4 Minutes before time update cancled*/ {
+    if (counter > 160) /*waiting for ~4 Minutes before time update cancled*/ {
       goOn = false;
-      Serial.println("ERROR - NO DCF UPDATE available");
+//      Serial.println("ERROR - NO DCF UPDATE available");
     }
-    counter++;
+    ++counter;
   }
 
 }

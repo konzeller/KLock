@@ -4,22 +4,22 @@
 enum contrStatus {RUNNING, INIT_PHASE, CLOCK_ADAPT_HOUR, CLOCK_ADAPT_MIN};
 enum contrStatus C_STATUS;
 
-int NOW_YEAR;
-int NOW_MONTH;
-int NOW_DAY;
-int NOW_HOUR;
-int NOW_MIN;
-int NOW_SEC;
-int LAST_HOUR = - 1;
-int LAST_MIN = -1;
+int8_t NOW_YEAR;
+int8_t NOW_MONTH;
+int8_t NOW_DAY;
+int8_t NOW_HOUR;
+int8_t NOW_MIN;
+int8_t NOW_SEC;
+int8_t LAST_HOUR = - 1;
+int8_t LAST_MIN = -1;
 
 bool AM_PM_ON = false;
 
-int LED_BRIGHTNESS = 255;  // brigness of clock --> 0-255
+uint8_t LED_BRIGHTNESS = 255;  // brigness of clock --> 0-255
 
 void setup () {
 
-  Serial.begin(9600);
+//  Serial.begin(9600);
 //  while (!Serial);
   C_STATUS = INIT_PHASE;
   DCF_init();
