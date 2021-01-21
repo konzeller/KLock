@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include "FastLED.h"
 
-#define LED_PIN 10
+#define LED_PIN 21 //10
 #define NUM_LEDS 114
 #define FADE_VAL 100
 #define COL_FADE 0x69
@@ -73,6 +73,7 @@ uint8_t SIZEOF_WORDS_HOUR[12] = {5, 4, 4, 4, 4, 4, 5, 6, 4, 4, 4, 3};
 uint8_t PLUS_MIN[4] = {11, 113, 102, 0};
 
 void LED_setBrightness() {
+//  Serial.println("SET BRIGHTNESS");
   FastLED.setBrightness(LED_BRIGHTNESS);
   FastLED.show();
 }

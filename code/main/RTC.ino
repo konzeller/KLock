@@ -16,7 +16,7 @@ RTC_DS3231 RTC;
 DateTime RTC_NOW;
 
 
-void RTC_init(){
+bool RTC_init(){
   
   if (! RTC.begin()) {
     Serial.println("Couldn't find RTC");
@@ -29,6 +29,10 @@ void RTC_init(){
     RTC.adjust(DateTime(DEFAULT_YEAR,DEFAULT_MONTH,DEFAULT_DAY,DEFAULT_HOUR,DEFAULT_MIN,DEFAULT_SEC));
     // This line sets the RTC with an explicit date & time, for example to set
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+    return true;
+  }else{
+    Serial.println("RTC last time available");
+    return false;
   }
 }
 

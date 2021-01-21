@@ -19,15 +19,18 @@ uint8_t LED_BRIGHTNESS = 255;  // brigness of clock --> 0-255
 
 void setup () {
 
-//  Serial.begin(9600);
-//  while (!Serial);
+  Serial.begin(9600);
+  //  while (!Serial);
   C_STATUS = INIT_PHASE;
   DCF_init();
   LED_init();
+  LDR_init();
   CS_init();
-  RTC_init();
-
-  DCF_searchInitTime();
+//    RTC_init();
+  if (RTC_init()) {
+    Serial.println("SearchInitTime");
+    DCF_searchInitTime();
+  }
   C_STATUS = RUNNING;
 }
 
@@ -36,12 +39,13 @@ void loop () {
 
   // update only when in Running mode
   if (C_STATUS == RUNNING) {
-    if((NOW_HOUR == UPDATE_DCF_AT_HOUR) & (NOW_MIN == UPDATE_DCF_AT_MIN)){
-       DCF_searchInitTime();
+    if ((NOW_HOUR == UPDATE_DCF_AT_HOUR) & (NOW_MIN == UPDATE_DCF_AT_MIN)) {
+      DCF_searchInitTime();
     }
     RTC_updateDateTime();
     LED_showCurrentTime();
   }
+  LDR_read();
 
   delay(50);
 
