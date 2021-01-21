@@ -47,7 +47,7 @@ void LDR_read() {
     else {
 //      Serial.print("Set: ");
 //      Serial.println(map(val, LDR_MIN, LDR_MAX, 5, 255));
-      target_bright = map(val, LDR_MIN, LDR_MAX, 5, 255);
+      target_bright = map(val, LDR_MIN, LDR_MAX, 10, 255);
       delta = target_bright - LED_BRIGHTNESS;
       delta = delta/abs(delta);
 //      LED_BRIGHTNESS = map(val, LDR_MIN, LDR_MAX, 5, 255);

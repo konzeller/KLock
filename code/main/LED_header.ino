@@ -6,11 +6,13 @@
 #define FADE_VAL 100
 #define COL_FADE 0x69
 
-#define LED_COL_METEOR CRGB::OrangeRed
-#define LED_COL_CONFIG CRGB::Red
+#define LED_COL_METEOR 3
+#define LED_COL_CONFIG 1
+uint8_t LED_COL_REGULAR = 0;
 
-int LED_COL_REGULAR = CRGB::White;
-CRGB LED_CURRENT_COL(LED_COL_REGULAR);
+long LED_COL[11] = {CRGB::White, CRGB::Red, CRGB::Magenta, CRGB::OrangeRed,CRGB::OliveDrab, CRGB::Green, CRGB::SeaGreen, CRGB::PaleGreen, CRGB::Blue, CRGB::Aqua, CRGB::Peru};
+
+CRGB LED_CURRENT_COL(LED_COL[LED_COL_REGULAR]);
 
 CRGB LEDs[NUM_LEDS];
 
@@ -81,7 +83,7 @@ void LED_setBrightness() {
 // init routine
 void LED_initRoutine() {
   LED_Blackout();
-  LED_CURRENT_COL.setColorCode(LED_COL_METEOR);
+  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_METEOR]);
   LED_meteorRain(15, 64, true, 55);
 }
 
@@ -111,7 +113,7 @@ void LED_blinkALL(uint8_t blinktime) {
 
   //  Serial.println("LED fade in ALL start");
   for (uint8_t blk = 0; blk < blinktime; ++blk) {
-    LED_CURRENT_COL.setColorCode(LED_COL_CONFIG);
+    LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_CONFIG]);
     for (uint8_t i = 0; i < NUM_LEDS; ++i) {
       LED_setPixel(i);
     }
@@ -123,7 +125,7 @@ void LED_blinkALL(uint8_t blinktime) {
 
   }
   //  LED_Blackout();
-  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
+  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_REGULAR]);
 }
 
 // all leds blackout
@@ -133,7 +135,7 @@ void LED_Blackout() {
     LED_setPixel(i);
   }
   LED_showStrip();
-  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
+  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_REGULAR]);
   ESIST_OFF = true;
   LAST_HOUR = -1;
   LAST_MIN = -1;
@@ -377,7 +379,7 @@ void LED_matrixScreen() {
     }
     FastLED.show();
   }
-  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
+  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_REGULAR]);
   ESIST_OFF = true;
   LAST_HOUR = -1;
   ALL_OUT = true;
@@ -386,26 +388,18 @@ void LED_matrixScreen() {
 
 void LED_blinkFUNK(uint8_t cycletime) {
   //  Serial.println("Show Funk Blink");
-  LED_CURRENT_COL.setColorCode(LED_COL_CONFIG);
+  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_CONFIG]);
   LED_fadeIn(FUNK, sizeof(FUNK) / sizeof(uint8_t));
   delay(cycletime);
   LED_fadeOut(FUNK, sizeof(FUNK) / sizeof(uint8_t));
   delay(FUNKCYCLE);
-  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
+  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_REGULAR]);
 }
 
 // TBD -- connection to Button
 void LED_changeREG_COL() {
-
-//  Serial.println("Change Color");
-//  Serial.println("--");
-  if (LED_COL_REGULAR <= 0xFFFFFF) {
-    LED_COL_REGULAR = LED_COL_REGULAR + COL_FADE;
-    LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
-  } else {
-    LED_COL_REGULAR = 0;
-  }
-//  Serial.println((LED_COL_REGULAR), HEX);
-//  Serial.println("--");
-
+      ++LED_COL_REGULAR;
+      if(LED_COL_REGULAR==sizeof(LED_COL)/sizeof(long)){LED_COL_REGULAR=0;}
+  Serial.println("Change Colorindex to: ");
+  Serial.println(LED_COL_REGULAR);
 }

@@ -15,7 +15,7 @@ int8_t LAST_MIN = -1;
 
 bool AM_PM_ON = false;
 
-uint8_t LED_BRIGHTNESS = 255;  // brigness of clock --> 0-255
+uint8_t LED_BRIGHTNESS = 180;  // brigness of clock --> 0-255
 
 void setup () {
 
