@@ -174,6 +174,7 @@ void LED_fadeOut(uint8_t text[], uint8_t size_of) {
 void LED_setAM_PM() {
   if (AM_PM_ON || ( C_STATUS != RUNNING)) {
 //        Serial.println("Show AM or PM");
+    LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_CONFIG]);
     if (NOW_HOUR >= 12) {
       if (PM_OFF) {
         LED_fadeOut(AM, sizeof(AM) / sizeof(uint8_t));
@@ -189,6 +190,7 @@ void LED_setAM_PM() {
         AM_OFF = false;
       }
     }
+    LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_REGULAR]);
   }
 }
 void LED_setHour(int8_t setHour = LAST_HOUR) {

@@ -2,8 +2,8 @@
 
 #define LDR_PIN 10
 #define UPDATE_CYC 20
-#define LDR_MAX 800
-#define LDR_MIN 300
+#define LDR_MAX 850
+#define LDR_MIN 450
 
 uint16_t val_pre = 0;
 uint16_t val = 0;
