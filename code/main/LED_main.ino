@@ -37,7 +37,7 @@ void LED_init () {
   FastLED.setBrightness(LED_BRIGHTNESS);
   LED_initRoutine();
   LED_Blackout();
-  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_REGULAR]);
+  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
 }
 
 // check current time and set the LEDs

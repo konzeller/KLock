@@ -31,8 +31,8 @@ void LDR_read() {
     }
     //    Serial.print("millisec:\t");
     //  Serial.println(millis());
-    Serial.print("Current val:\t");
-    Serial.println(val);
+//    Serial.print("Current val:\t");
+//    Serial.println(val);
 //    Serial.print("Pre val:\t");
 //    Serial.println(val_pre);
     val_max = val_pre + toleranze;
@@ -68,10 +68,10 @@ void LDR_next(){
 //  Serial.println(LED_BRIGHTNESS);
   
   if(target_bright != LED_BRIGHTNESS){
-      Serial.print("Adapt Brightness from:\t");
-      Serial.println(LED_BRIGHTNESS);
-      Serial.print("\tto:\t");
-      Serial.println(target_bright);
+//      Serial.print("Adapt Brightness from:\t");
+//      Serial.println(LED_BRIGHTNESS);
+//      Serial.print("\tto:\t");
+//      Serial.println(target_bright);
   LED_BRIGHTNESS += delta;
       LED_setBrightness();
   }

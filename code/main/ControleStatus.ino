@@ -1,17 +1,17 @@
 #include <Wire.h>
 
 #define BTN_PIN_CLOCKADAPT 19
-#define BTN_PIN_SET 18
+#define BTN_PIN_LEDCONFIG 18
 
 
 bool BTN_CLOCKADAPT_LAST = true;
-bool BTN_SET_LAST = true;
+bool BTN_LEDCONFIG_LAST = true;
 
 void CS_init() {
   C_STATUS = RUNNING;
   pinMode(BTN_PIN_CLOCKADAPT, INPUT_PULLUP);
   //  pinMode(BTN_PIN_HOUR, INPUT_PULLUP);
-  pinMode(BTN_PIN_SET, INPUT_PULLUP);
+  pinMode(BTN_PIN_LEDCONFIG, INPUT_PULLUP);
 }
 
 
@@ -19,7 +19,7 @@ void CS_init() {
 void CS_checkButtons() {
   switch (C_STATUS) {
     case RUNNING:
-      CS_checkBRIGHT_BTN();
+      CS_checkLEDCONFIG_BTN();
       CS_checkCLOCKADAPT_BTN();
       break;
 
@@ -37,25 +37,42 @@ void CS_checkButtons() {
 
 }
 
-void CS_checkBRIGHT_BTN() {
-  if ((digitalRead(BTN_PIN_SET) == false)) {
-    CS_changeBrightness();
-    delay(30);
+/* Check if Button LEDConfig has been pushed */
+void CS_checkLEDCONFIG_BTN() {
+  bool btn_val = digitalRead(BTN_PIN_LEDCONFIG);
+  if(btn_val == LOW){
+    if(btn_val != BTN_LEDCONFIG_LAST){
+      CS_changeLEDColor();
+//      switch(C_STATUS){
+//        case RUNNING:
+//          C_STATUS = CLED_SETCOLOR;
+//          break;
+//        case CLED_SETCOLOR:
+//          C_STATUS = RUNNING;
+//          LED_blinkALL(1);
+//          break;        
+//      }
+    }
   }
-}
-
-void CS_changeBrightness() {
-  LED_BRIGHTNESS = LED_BRIGHTNESS + 4;
-  Serial.println("BRIGHNESS");
-  Serial.println(LED_BRIGHTNESS);
-//  if (LED_BRIGHTNESS <= 255) {
-    LED_setBrightness();
-//  } else {
-//    LED_blinkALL(1);
-//    LED_BRIGHTNESS = 0;
-//    LED_showCurrentTime();
+  BTN_LEDCONFIG_LAST = btn_val;
+//  if ((digitalRead(BTN_PIN_LEDCONFIG) == false)) {
+//    CS_changeBrightness();
+//    delay(30);
 //  }
 }
+
+void CS_changeLEDColor(){
+  LED_Blackout();
+  LED_incrColor();
+}
+
+//void CS_changeBrightness() {
+//  LED_BRIGHTNESS = LED_BRIGHTNESS + 4;
+//  Serial.println("BRIGHNESS");
+//  Serial.println(LED_BRIGHTNESS);
+////  if (LED_BRIGHTNESS <= 255) {
+//    LED_setBrightness();
+//}
 
 // check in which running status the programm is
 void CS_checkCLOCKADAPT_BTN() {
@@ -83,7 +100,6 @@ void CS_checkCLOCKADAPT_BTN() {
           RTC_setNewTime();//NOW_HOUR, NOW_MIN);
           LED_blinkALL(1);
 //          LED_showCurrentTime();
-          
           break;
       }
     }
@@ -92,9 +108,9 @@ void CS_checkCLOCKADAPT_BTN() {
 }
 
 void CS_checkSET_TIME_BTN() {
-  bool btn_val = digitalRead(BTN_PIN_SET);
+  bool btn_val = digitalRead(BTN_PIN_LEDCONFIG);
   if (btn_val == LOW) {
-    if (btn_val != BTN_SET_LAST) {
+    if (btn_val != BTN_LEDCONFIG_LAST) {
       switch (C_STATUS) {
         case CLOCK_ADAPT_HOUR:
 //          Serial.println("HOUR PLUS ONE");
@@ -108,7 +124,7 @@ void CS_checkSET_TIME_BTN() {
       }
     }
   }
-  BTN_SET_LAST = btn_val;
+  BTN_LEDCONFIG_LAST = btn_val;
 }
 
 // adapt the hours

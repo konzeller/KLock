@@ -6,13 +6,14 @@
 #define FADE_VAL 100
 #define COL_FADE 0x69
 
-#define LED_COL_METEOR 3
-#define LED_COL_CONFIG 1
-uint8_t LED_COL_REGULAR = 0;
+#define LED_COL_METEOR CRGB::OrangeRed //3
+#define LED_COL_CONFIG CRGB::Red
 
-long LED_COL[11] = {CRGB::White, CRGB::Red, CRGB::Magenta, CRGB::OrangeRed,CRGB::OliveDrab, CRGB::Green, CRGB::SeaGreen, CRGB::PaleGreen, CRGB::Blue, CRGB::Aqua, CRGB::Peru};
+#define LED_MAX_COL_NR 12
+uint8_t LED_COL_NR = 0;
 
-CRGB LED_CURRENT_COL(LED_COL[LED_COL_REGULAR]);
+long LED_COL_REGULAR = CRGB::White;
+CRGB LED_CURRENT_COL(LED_COL_REGULAR);
 
 CRGB LEDs[NUM_LEDS];
 
@@ -80,10 +81,40 @@ void LED_setBrightness() {
   FastLED.show();
 }
 
+void LED_incrColor(){
+  ++LED_COL_NR;
+  if(LED_COL_NR>=LED_MAX_COL_NR){LED_COL_NR=0;}
+  Serial.print("LED Color NR: ");
+  Serial.println(LED_COL_NR);
+  Serial.print("LED REG Color: ");
+  Serial.println(LED_COL_REGULAR, HEX);
+  switch(LED_COL_NR){
+    
+    case 0: LED_COL_REGULAR = CRGB::White; break;
+    case 1: LED_COL_REGULAR = CRGB::LightYellow; break;
+    case 2: LED_COL_REGULAR = CRGB::Yellow; break;
+    case 3: LED_COL_REGULAR = CRGB::Peru; break;
+    case 4: LED_COL_REGULAR = CRGB::Red; break;
+    case 5: LED_COL_REGULAR = CRGB::DeepPink; break;
+    case 6: LED_COL_REGULAR = CRGB::Magenta; break;
+    case 7: LED_COL_REGULAR = CRGB::LightPink; break;
+    case 8: LED_COL_REGULAR = CRGB::Aqua; break;
+    case 9: LED_COL_REGULAR = CRGB::Blue; break;
+    case 10: LED_COL_REGULAR = CRGB::Olive; break;
+    case 11: LED_COL_REGULAR = CRGB::Green; break;
+//    case 11: LED_COL_REGULAR = CRGB::White; break;
+//    case 12: LED_COL_REGULAR = CRGB::White; break;
+//    case 13: LED_COL_REGULAR = CRGB::White; break;
+    }
+   LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
+  
+  
+}
+
 // init routine
 void LED_initRoutine() {
   LED_Blackout();
-  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_METEOR]);
+  LED_CURRENT_COL.setColorCode(LED_COL_METEOR);
   LED_meteorRain(15, 64, true, 55);
 }
 
@@ -113,7 +144,7 @@ void LED_blinkALL(uint8_t blinktime) {
 
   //  Serial.println("LED fade in ALL start");
   for (uint8_t blk = 0; blk < blinktime; ++blk) {
-    LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_CONFIG]);
+    LED_CURRENT_COL.setColorCode(LED_COL_CONFIG);
     for (uint8_t i = 0; i < NUM_LEDS; ++i) {
       LED_setPixel(i);
     }
@@ -125,7 +156,7 @@ void LED_blinkALL(uint8_t blinktime) {
 
   }
   //  LED_Blackout();
-  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_REGULAR]);
+  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
 }
 
 // all leds blackout
@@ -135,7 +166,7 @@ void LED_Blackout() {
     LED_setPixel(i);
   }
   LED_showStrip();
-  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_REGULAR]);
+  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
   ESIST_OFF = true;
   LAST_HOUR = -1;
   LAST_MIN = -1;
@@ -174,7 +205,7 @@ void LED_fadeOut(uint8_t text[], uint8_t size_of) {
 void LED_setAM_PM() {
   if (AM_PM_ON || ( C_STATUS != RUNNING)) {
 //        Serial.println("Show AM or PM");
-    LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_CONFIG]);
+    LED_CURRENT_COL.setColorCode(LED_COL_CONFIG);
     if (NOW_HOUR >= 12) {
       if (PM_OFF) {
         LED_fadeOut(AM, sizeof(AM) / sizeof(uint8_t));
@@ -190,7 +221,7 @@ void LED_setAM_PM() {
         AM_OFF = false;
       }
     }
-    LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_REGULAR]);
+    LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
   }
 }
 void LED_setHour(int8_t setHour = LAST_HOUR) {
@@ -381,27 +412,27 @@ void LED_matrixScreen() {
     }
     FastLED.show();
   }
-  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_REGULAR]);
   ESIST_OFF = true;
   LAST_HOUR = -1;
   ALL_OUT = true;
   LED_setBrightness();
+  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
 }
 
 void LED_blinkFUNK(uint8_t cycletime) {
   //  Serial.println("Show Funk Blink");
-  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_CONFIG]);
+  LED_CURRENT_COL.setColorCode(LED_COL_CONFIG);
   LED_fadeIn(FUNK, sizeof(FUNK) / sizeof(uint8_t));
   delay(cycletime);
   LED_fadeOut(FUNK, sizeof(FUNK) / sizeof(uint8_t));
   delay(FUNKCYCLE);
-  LED_CURRENT_COL.setColorCode(LED_COL[LED_COL_REGULAR]);
+  LED_CURRENT_COL.setColorCode(LED_COL_REGULAR);
 }
 
 // TBD -- connection to Button
-void LED_changeREG_COL() {
-      ++LED_COL_REGULAR;
-      if(LED_COL_REGULAR==sizeof(LED_COL)/sizeof(long)){LED_COL_REGULAR=0;}
-  Serial.println("Change Colorindex to: ");
-  Serial.println(LED_COL_REGULAR);
-}
+//void LED_changeREG_COL() {
+//      ++LED_COL_REGULAR;
+//      if(LED_COL_REGULAR==sizeof(LED_COL)/sizeof(long)){LED_COL_REGULAR=0;}
+//  Serial.println("Change Colorindex to: ");
+//  Serial.println(LED_COL_REGULAR);
+//}

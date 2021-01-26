@@ -1,7 +1,7 @@
 #define UPDATE_DCF_AT_HOUR 3  // update daily at 3:30 AM
 #define UPDATE_DCF_AT_MIN 30 // update daily at 3:30 AM
 
-enum contrStatus {RUNNING, INIT_PHASE, CLOCK_ADAPT_HOUR, CLOCK_ADAPT_MIN};
+enum contrStatus {RUNNING, INIT_PHASE, CLOCK_ADAPT_HOUR, CLOCK_ADAPT_MIN/*, CLED_SETCOLOR*/};
 enum contrStatus C_STATUS;
 
 int8_t NOW_YEAR;
@@ -16,6 +16,7 @@ int8_t LAST_MIN = -1;
 bool AM_PM_ON = false;
 
 uint8_t LED_BRIGHTNESS = 180;  // brigness of clock --> 0-255
+
 
 void setup () {
 
